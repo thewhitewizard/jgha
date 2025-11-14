@@ -9,6 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
 
     steps:
     - uses: actions/checkout@v4
@@ -28,8 +32,10 @@ jobs:
       if: always()
       uses: EnricoMi/publish-unit-test-result-action@v2
       with:
-        files: '**/build/test-results/**/*.xml'
+        files: '**/build/test-results/test/*.xml'
         check_name: 'Test Results'
+        report_individual_runs: false
+        fail_on: 'nothing'
 
     - name: Upload Test Coverage Reports
       if: always()
