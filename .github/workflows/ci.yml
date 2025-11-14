@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -22,5 +21,20 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
 
-    - name: Build with Gradle Wrapper
+    - name: Build and Test with Gradle
       run: ./gradlew build
+
+    - name: Publish Test Results
+      if: always()
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      with:
+        files: '**/build/test-results/**/*.xml'
+        check_name: 'Test Results'
+
+    - name: Upload Test Coverage Reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-reports
+        path: '**/build/reports/jacoco/**'
+        retention-days: 2
