@@ -36,6 +36,14 @@ tasks.withType(JavaCompile).configureEach {
     options.compilerArgs.add('-parameters')
 }
 
+tasks.named('test') {
+    useJUnitPlatform()
+    reports {
+        junitXml.required = true
+        html.required = true
+    }
+}
+
 dependencies {
     // Spring Boot
     implementation 'org.springframework.boot:spring-boot-starter'

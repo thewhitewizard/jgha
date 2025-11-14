@@ -26,13 +26,23 @@ jobs:
       uses: gradle/actions/setup-gradle@v4
 
     - name: Build and Test with Gradle
-      run: ./gradlew build
+      run: ./gradlew clean build jacocoTestReport
+
+    - name: List test result files
+      if: always()
+      run: |
+        echo "Looking for test result files..."
+        find . -name "*.xml" -path "*/test-results/*" 2>/dev/null || echo "No test result XML files found"
+        find . -name "TEST-*.xml" 2>/dev/null || echo "No TEST-*.xml files found"
+        ls -la build/test-results/test/ 2>/dev/null || echo "build/test-results/test/ directory does not exist"
 
     - name: Publish Test Results
       if: always()
       uses: EnricoMi/publish-unit-test-result-action@v2
       with:
-        files: '**/build/test-results/test/*.xml'
+        files: |
+          **/build/test-results/test/*.xml
+          **/build/test-results/**/*.xml
         check_name: 'Test Results'
         report_individual_runs: false
         fail_on: 'nothing'
