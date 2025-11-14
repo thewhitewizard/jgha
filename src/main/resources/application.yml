@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: thewhitewizard-jgha
+
+logging:
+  level:
+    root: INFO
